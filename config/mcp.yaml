@@ -1,20 +1,54 @@
-integrations:
-  database:
-    enabled: true
-    provider: sqlite
-    connection_string: ${DATABASE_URL:-sqlite:///./data/support.db}
+# MCP (Model Context Protocol) Configuration
+# Support Intelligence Agent
 
+integrations:
+  # Zendesk Integration
   zendesk:
-    enabled: false
+    enabled: true
     subdomain: ${ZENDESK_SUBDOMAIN}
     email: ${ZENDESK_EMAIL}
     api_token: ${ZENDESK_API_TOKEN}
+    sync_interval: 300  # seconds
+    ticket_views:
+      - "open_tickets"
+      - "pending_tickets"
+      - "recently_solved"
 
+  # Freshdesk Integration
+  freshdesk:
+    enabled: false
+    domain: ${FRESHDESK_DOMAIN}
+    api_key: ${FRESHDESK_API_KEY}
+
+  # Intercom Integration  
   intercom:
     enabled: false
     access_token: ${INTERCOM_ACCESS_TOKEN}
 
+  # Slack Integration
   slack:
     enabled: false
     bot_token: ${SLACK_BOT_TOKEN}
-    channel: support-alerts
+    app_token: ${SLACK_APP_TOKEN}
+    channels:
+      - support-alerts
+      - pattern-notifications
+
+  # Database MCP
+  database:
+    enabled: true
+    provider: sqlite
+    connection_string: ${DATABASE_URL}
+
+# Pattern Detection Settings
+pattern_detection:
+  min_tickets_for_pattern: 3
+  similarity_threshold: 0.8
+  time_window_hours: 168  # 7 days
+  auto_detect_interval: 3600  # 1 hour
+
+# Knowledge Gap Detection
+knowledge_gaps:
+  min_tickets_for_gap: 5
+  faq_generation_threshold: 0.7
+  auto_suggest_articles: true
